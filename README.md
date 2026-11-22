@@ -10,7 +10,7 @@ Morning AI Scout helps Dhanaraj Esuru, an MCA student pursuing Generative AI, ke
 - Shortlists up to five credible tools/news items and up to five qualifying papers, chooses one timely video idea, and explains why it fits his Gen AI studies and audience.
 - Writes three hook options and five major video points in Telugu, Hindi, and English, with source links.
 - Saves each report in `outputs/YYYY-MM-DD.md`.
-- When connected Google Drive and Gmail access is available, creates a dated Google Doc in `AI Scout` and emails the complete report, including both shortlists.
+- Emails the complete report, including both shortlists and source links, directly through Gmail. It does not use Google Drive or create Google Docs.
 
 ## Run the daily scout
 
