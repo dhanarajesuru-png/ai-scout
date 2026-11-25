@@ -1,0 +1,47 @@
+{
+  "version": 2,
+  "skills": {
+    "tavily-entity": {
+      "source": "tavily-ai/skills",
+      "commit": "ec39437f3b4abe9b3ae52604f2c95cb852927ce6",
+      "sourceType": "github",
+      "skillPath": "skills/tasks/tavily-entity/SKILL.md",
+      "computedHash": "592f6bbb577b2c3bc27a9fd624450cd94df2abe2d8487aabce3aa4b8bc3abc76"
+    },
+    "tavily-list": {
+      "source": "tavily-ai/skills",
+      "commit": "ec39437f3b4abe9b3ae52604f2c95cb852927ce6",
+      "sourceType": "github",
+      "skillPath": "skills/tasks/tavily-list/SKILL.md",
+      "computedHash": "295b833c822db021a74c79cf1117f1d276983a76de8efecbab52bce9c8d9c126"
+    },
+    "tavily-monitor": {
+      "source": "tavily-ai/skills",
+      "commit": "ec39437f3b4abe9b3ae52604f2c95cb852927ce6",
+      "sourceType": "github",
+      "skillPath": "skills/tasks/tavily-monitor/SKILL.md",
+      "computedHash": "cbfe58db9e7c741e739f17d4d02e4f9b38e699db77418b2fa6111faa86a58cf0"
+    },
+    "tavily-research": {
+      "source": "tavily-ai/skills",
+      "commit": "ec39437f3b4abe9b3ae52604f2c95cb852927ce6",
+      "sourceType": "github",
+      "skillPath": "skills/tasks/tavily-research/SKILL.md",
+      "computedHash": "7d9e8dfbd8e2461486fe46ae0784bc27e3421b5bee72b1cb83c89cc0b55676ff"
+    },
+    "tavily-sdk": {
+      "source": "tavily-ai/skills",
+      "commit": "ec39437f3b4abe9b3ae52604f2c95cb852927ce6",
+      "sourceType": "github",
+      "skillPath": "skills/developers/tavily-sdk/SKILL.md",
+      "computedHash": "acfac8096f9d944511fe66c40c4f3fdeb446a43abc2c4cfb15aa25180e6c2b70"
+    },
+    "tavily-search": {
+      "source": "tavily-ai/skills",
+      "commit": "ec39437f3b4abe9b3ae52604f2c95cb852927ce6",
+      "sourceType": "github",
+      "skillPath": "skills/core/tavily-search/SKILL.md",
+      "computedHash": "c16827da7b698aedc7bb9f0dc6b2f2db7389dd89e425d089ae8132f55d9c182d"
+    }
+  }
+}
