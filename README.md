@@ -1,27 +1,22 @@
 # Morning AI Scout
 
-Morning AI Scout helps Dhanaraj Esuru, an MCA student pursuing Generative AI, keep up with useful AI tools and news and turn the best story into a video plan.
+Morning AI Scout helps Dhanaraj Esuru, an MCA student pursuing Generative AI, find useful AI tools, news, and research and turn the strongest item into a video plan.
 
-## What it does
+## Workflow
 
-- Researches AI tools and news published in the previous 24 hours across Product Hunt, Hacker News, Reddit, X, and official AI company blogs.
-- Prioritizes mostly free tools Dhanaraj can try today and skips funding news, following `memory.md`.
-- Shortlists up to five credible items, chooses one timely video idea, and explains why it fits his learning and audience.
-- Writes three hook options and five major video points in Telugu, Hindi, and English, with source links.
-- Saves each report in `outputs/YYYY-MM-DD.md`.
-- When connected Google Drive and Gmail access is available, creates a dated Google Doc in `AI Scout` and emails the report as specified in the skill.
+- Daily mode runs on the 24-hour India-time window, prioritizes tools that are mostly free to try, skips funding news, and verifies papers at primary sources.
+- Test mode validates the latest saved report without repeating research or resending the daily digest.
+- Each report includes up to five tools/news items, up to five eligible papers, one video idea, three trilingual hooks, and five trilingual outline points.
+- Reports are saved in `outputs/YYYY-MM-DD.md`, validated before delivery, and emailed directly through Gmail. The workflow does not use Google Drive.
 
-## Run the daily scout
+## Instructions
 
-Use the `daily-scout` skill for the morning run. It is located at `.chatgpt/skills/daily-scout/SKILL.md` and contains the step-by-step research, writing, saving, and delivery instructions.
-
-Before every run, read `memory.md` and follow its rules. When Dhanaraj gives feedback, add a short rule dated with the feedback date so future runs can use it.
+The operational source of truth is `.chatgpt/skills/daily-scout/SKILL.md`. Read `memory.md` before every run; it stores Dhanaraj’s persistent preferences and feedback rules.
 
 ## Project files
 
-- `CHATGPT.md` — the agent job description.
-- `memory.md` — persistent preferences and feedback rules.
-- `.chatgpt/skills/daily-scout/SKILL.md` — the daily run manual.
-- `outputs/` — dated scout reports.
-
-Each report covers only the previous 24 hours. If fewer than five credible items meet the criteria, the report should say so rather than pad the shortlist with older or weak stories.
+- `CHATGPT.md` — short agent description.
+- `memory.md` — preferences and feedback.
+- `.chatgpt/skills/daily-scout/SKILL.md` — daily and test procedures.
+- `scripts/validate_report.py` — pre-email report checks.
+- `outputs/` — dated reports.
