@@ -93,8 +93,8 @@ def main() -> int:
         return 0
     output("skipped", "false")
 
-    tavily_key = os.environ.get("TAVILY_API_KEY")
-    openai_key = os.environ.get("OPENAI_API_KEY")
+    tavily_key = (os.environ.get("TAVILY_API_KEY") or "").strip()
+    openai_key = (os.environ.get("OPENAI_API_KEY") or "").strip()
     if not tavily_key:
         raise RuntimeError("Missing TAVILY_API_KEY GitHub Actions secret.")
     if not openai_key:
