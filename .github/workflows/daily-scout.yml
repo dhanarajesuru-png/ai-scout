@@ -1,0 +1,60 @@
+name: Daily AI Scout
+
+on:
+  schedule:
+    # 07:00 Asia/Kolkata (01:30 UTC). GitHub may delay scheduled starts.
+    - cron: "30 1 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-scout-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  daily-scout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip && python -m pip install -r requirements-actions.txt
+
+      - name: Research and write today's report
+        id: scout
+        run: python scripts/run_github_scout.py
+        env:
+          TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-6.2-sol' }}
+
+      - name: Validate report
+        if: steps.scout.outputs.skipped != 'true'
+        run: python scripts/validate_report.py "${{ steps.scout.outputs.report }}"
+
+      - name: Email report directly through Gmail
+        if: steps.scout.outputs.skipped != 'true'
+        run: python scripts/send_report_email.py "${{ steps.scout.outputs.report }}"
+        env:
+          GMAIL_ADDRESS: ${{ vars.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+
+      - name: Commit report and memory to main
+        if: steps.scout.outputs.skipped != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "${{ steps.scout.outputs.report }}" "outputs/.sent/${{ steps.scout.outputs.report_date }}.sent" memory.md
+          git diff --cached --quiet || git commit -m "Daily AI Scout: ${{ steps.scout.outputs.report_date }}"
+          git push origin HEAD:main
