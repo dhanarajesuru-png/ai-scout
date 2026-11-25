@@ -55,9 +55,9 @@ def main() -> int:
     news_count = len(re.findall(r"(?m)^\s*\d+\.\s+", news_section))
     paper_count = len(re.findall(r"(?m)^\s*\d+\.\s+", papers_section))
     summary = (
-        f"Best video idea:\\n{video_section[:900] or 'See the full report below.'}\\n\\n"
-        f"Shortlists: {news_count} AI tools/news items; {paper_count} qualifying research papers.\\n\\n"
-        "Full report\\n\\n"
+        f"Best video idea:\n{video_section[:900] or 'See the full report below.'}\n\n"
+        f"Shortlists: {news_count} AI tools/news items; {paper_count} qualifying research papers.\n\n"
+        "Full report\n\n"
     )
     message.set_content(summary + report_text)
 
