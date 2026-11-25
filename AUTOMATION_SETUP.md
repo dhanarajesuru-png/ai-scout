@@ -9,13 +9,13 @@ In the repository, open **Settings → Secrets and variables → Actions**.
 Add these repository secrets:
 
 - **TAVILY_API_KEY** — your Tavily API key.
-- **OPENAI_API_KEY** — your OpenAI API key. API usage is billed separately from a ChatGPT plan.
+- **OPENROUTER_API_KEY** — your OpenRouter API key. The default model uses OpenRouter's free model router; free models are rate limited. See [OpenRouter free models](https://openrouter.ai/collections/free-models/).
 - **GMAIL_APP_PASSWORD** — an app password for the Gmail account that sends the email. Google requires 2-Step Verification for app passwords and recommends Sign in with Google where supported: [Google's app password guidance](https://support.google.com/mail/answer/185833).
 
 Add these repository variables:
 
 - **GMAIL_ADDRESS** — the Gmail address used as both sender and recipient.
-- **OPENAI_MODEL** — optional; defaults to gpt-6.2-sol.
+- **OPENROUTER_MODEL** — optional; defaults to `openrouter/free`.
 
 ## Allow report commits
 
