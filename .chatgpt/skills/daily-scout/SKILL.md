@@ -31,3 +31,10 @@ Scheduled runs always use Daily mode.
 9. **Validate before emailing.** Run `python scripts/validate_report.py outputs/YYYY-MM-DD.md`. Fix every reported error before continuing. The validator checks the date/window, required sections, item limits, language coverage, and links. Do not claim validation passed if it did not run successfully.
 10. **Email directly through Gmail.** Do not use Google Drive or create a Google Doc. Search Sent for the exact daily subject/date first; never send a duplicate daily digest for a date already delivered. If no duplicate exists, send to the authenticated Gmail account using subject `Morning AI Scout — YYYY-MM-DD`. Put a brief summary of the best video idea and shortlist counts first, followed by the complete report and `outputs/YYYY-MM-DD.md` path. If Gmail is unavailable or the authenticated recipient cannot be resolved, do not guess; report that delivery did not happen.
 11. **Apply feedback next time.** When Dhanaraj gives feedback, add a short rule dated with the feedback date to `memory.md`. Keep existing rules and follow all rules in future runs.
+
+
+## GitHub-hosted scheduled runs
+
+The scheduled workflow at .github/workflows/daily-scout.yml runs on a GitHub-hosted runner at 07:00 Asia/Kolkata, so it can run when Dhanaraj's computer is off. The runner reads memory.md before doing work, loads this skill plus .agents/skills/tavily-search/SKILL.md and .agents/skills/tavily-sdk/SKILL.md, searches through the Tavily Python SDK, generates the report through the OpenAI API, and runs scripts/validate_report.py. The official Tavily skills are also kept in skills-lock.json and .agents/skills/.
+
+For GitHub Actions delivery, use scripts/send_report_email.py with the GMAIL_ADDRESS Actions variable and GMAIL_APP_PASSWORD secret. The hosted runner cannot access the Gmail connector signed in inside ChatGPT/Codex. Send directly through Gmail SMTP; never use Google Drive. After successful email delivery, commit the report, the outputs/.sent marker, and memory.md to main. See AUTOMATION_SETUP.md for required GitHub settings and credentials.
