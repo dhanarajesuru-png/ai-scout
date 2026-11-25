@@ -15,7 +15,7 @@ Add these repository secrets:
 Add these repository variables:
 
 - **GMAIL_ADDRESS** — the Gmail address used as both sender and recipient.
-- **OPENROUTER_MODEL** — optional; defaults to `openrouter/free`.
+- **OPENROUTER_MODEL** — optional; defaults to `nvidia/nemotron-3-ultra-550b-a55b:free`. Use a free text model ID to avoid usage charges; model availability and free-tier rate limits can change.
 
 ## Allow report commits
 
