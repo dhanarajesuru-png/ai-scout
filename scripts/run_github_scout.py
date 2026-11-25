@@ -108,6 +108,9 @@ def main() -> int:
     start = end - timedelta(hours=24)
     window = f"{start:%Y-%m-%d %H:%M} to {end:%Y-%m-%d %H:%M} IST (Asia/Kolkata)"
     context = project_context(memory)
+    # OpenRouter free endpoints may use provider data to improve services. Avoid sending the
+    # creator's personal name to external inference providers.
+    context = context.replace("Dhanaraj Esuru", "the creator").replace("Dhanaraj", "the creator")
     sources = search_sources(TavilyClient(api_key=tavily_key))
     prompt = f"""
 Follow all supplied project instructions, especially memory.md and the daily-scout skill.
@@ -122,7 +125,7 @@ invent facts, dates, authors, pricing, access details, or links. Use supplied UR
 Exclude funding news. Prioritize tools mostly free and usable today; state free-tier, trial,
 paid, or paid-key caveats clearly.
 
-Required headings:
+Required headings (each on its own line, exactly as written, in this order):
 # Morning AI Scout — {date}
 **Research window:** {window}
 ## Top 5 AI tools and news
@@ -130,12 +133,15 @@ Required headings:
 ## Best video idea
 ## Hook options
 ## Five major points
+Start the response with the title. Do not add an introduction, conclusion, or code fence.
+Keep all five sections even if a shortlist is empty; state "None qualified in this 24-hour window."
+Do not replace, translate, or reword the required headings.
 
 List up to five qualifying tools/news and papers; never pad with older or unverified items.
 If a section has no qualifying items, write: None qualified in this 24-hour window.
 For each paper include authors, first-post/publication date, primary link, preprint or
 peer-reviewed status, plain-English contribution, why it matters, and one caveat.
-Choose one video idea for Dhanaraj Esuru, an MCA student pursuing Gen AI, and explain why it
+Choose one video idea for the creator, an MCA student pursuing Gen AI, and explain why it
 fits his studies and audience. Write exactly three numbered hook options, each with **Telugu:**,
 **Hindi:**, and **English:** versions. Write exactly five numbered major points, each with those
 same three language labels, consistent meaning, and at least one supporting Markdown source
@@ -148,7 +154,16 @@ Tavily search results (JSON):
 {json.dumps(sources, ensure_ascii=False)}
 """.strip()
 
-    model = (os.environ.get("OPENROUTER_MODEL") or "openrouter/free").strip()
+    model_setting = (
+        os.environ.get("OPENROUTER_MODEL")
+        or "nvidia/nemotron-3-ultra-550b-a55b:free"
+    ).strip()
+    # Older workflow runs may still pass openrouter/free; use the stable text model instead.
+    model = (
+        "nvidia/nemotron-3-ultra-550b-a55b:free"
+        if model_setting == "openrouter/free"
+        else model_setting
+    )
     client = OpenAI(
         api_key=openrouter_key,
         base_url="https://openrouter.ai/api/v1",
@@ -156,13 +171,14 @@ Tavily search results (JSON):
             "HTTP-Referer": "https://github.com/dhanarajesuru-png/ai-scout",
             "X-Title": "Morning AI Scout",
         },
-        max_retries=2,
+        max_retries=1,
         timeout=120,
     )
     def generate_report_text(request_prompt: str) -> str:
         result = client.chat.completions.create(
             model=model,
             max_tokens=9000,
+            temperature=0.2,
             messages=[
                 {
                     "role": "system",
@@ -185,7 +201,11 @@ Tavily search results (JSON):
         else:
             generated = ""
         if not generated:
-            raise RuntimeError("OpenRouter returned an empty report.")
+            choice = result.choices[0]
+            raise RuntimeError(
+                f"OpenRouter returned no text content "
+                f"(model={model}, finish_reason={choice.finish_reason})."
+            )
         return generated
 
     text = generate_report_text(prompt)
