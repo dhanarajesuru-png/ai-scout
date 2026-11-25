@@ -94,11 +94,11 @@ def main() -> int:
     output("skipped", "false")
 
     tavily_key = (os.environ.get("TAVILY_API_KEY") or "").strip()
-    openai_key = (os.environ.get("OPENAI_API_KEY") or "").strip()
+    openrouter_key = (os.environ.get("OPENROUTER_API_KEY") or "").strip()
     if not tavily_key:
         raise RuntimeError("Missing TAVILY_API_KEY GitHub Actions secret.")
-    if not openai_key:
-        raise RuntimeError("Missing OPENAI_API_KEY GitHub Actions secret.")
+    if not openrouter_key:
+        raise RuntimeError("Missing OPENROUTER_API_KEY GitHub Actions secret.")
 
     end = now.replace(second=0, microsecond=0)
     start = end - timedelta(hours=24)
@@ -144,13 +144,33 @@ Tavily search results (JSON):
 {json.dumps(sources, ensure_ascii=False)}
 """.strip()
 
-    model = os.environ.get("OPENAI_MODEL", "gpt-6.2-sol")
-    result = OpenAI(api_key=openai_key, max_retries=2, timeout=120).responses.create(
-        model=model, reasoning={"effort": "low"}, max_output_tokens=9000, input=prompt
+    model = (os.environ.get("OPENROUTER_MODEL") or "openrouter/free").strip()
+    client = OpenAI(
+        api_key=openrouter_key,
+        base_url="https://openrouter.ai/api/v1",
+        default_headers={
+            "HTTP-Referer": "https://github.com/dhanarajesuru-png/ai-scout",
+            "X-Title": "Morning AI Scout",
+        },
+        max_retries=2,
+        timeout=120,
     )
-    text = (result.output_text or "").strip()
+    result = client.chat.completions.create(
+        model=model,
+        max_tokens=9000,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    message = result.choices[0].message.content
+    if isinstance(message, str):
+        text = message.strip()
+    elif isinstance(message, list):
+        text = "\n".join(
+            part.text for part in message if getattr(part, "type", None) == "text"
+        ).strip()
+    else:
+        text = ""
     if not text:
-        raise RuntimeError("OpenAI returned an empty report.")
+        raise RuntimeError("OpenRouter returned an empty report.")
     if not text.endswith("\n"):
         text += "\n"
     destination = ROOT / report
