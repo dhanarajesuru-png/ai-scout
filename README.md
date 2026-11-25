@@ -20,3 +20,7 @@ The operational source of truth is `.chatgpt/skills/daily-scout/SKILL.md`. Read 
 - `.chatgpt/skills/daily-scout/SKILL.md` — daily and test procedures.
 - `scripts/validate_report.py` — pre-email report checks.
 - `outputs/` — dated reports.
+
+## Run while your computer is off
+
+The repository includes a GitHub Actions workflow scheduled for 07:00 India time. It uses Tavily for discovery, saves and validates a dated report, sends it directly through Gmail SMTP, and commits the report and memory.md changes to main. Configure the required GitHub secrets and variables using [AUTOMATION_SETUP.md](AUTOMATION_SETUP.md). The hosted run uses the OpenAI API, which is billed separately from ChatGPT.
