@@ -1,6 +1,11 @@
 name: Daily AI Scout
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflow-dispatch-once"
   schedule:
     # 07:00 Asia/Kolkata (01:30 UTC). GitHub may delay scheduled starts.
     - cron: "30 1 * * *"
